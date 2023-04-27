@@ -3,6 +3,42 @@
 
 
 <head>
+  
+  <button onclick="salvarDados()">Salvar dados</button>
+
+  <script>
+  function salvarDados() {
+    const tabela = document.querySelector('tbody');
+    const linhas = tabela.querySelectorAll('tr');
+    const dados = [];
+
+    linhas.forEach((linha) => {
+      const colunas = linha.querySelectorAll('td');
+      const registro = {};
+
+      colunas.forEach((coluna, index) => {
+        if (index === 0) {
+          registro['credor'] = coluna.innerText;
+        } else {
+          const input = coluna.querySelector('input');
+          registro[input.type] = input.checked || input.value;
+        }
+      });
+
+      dados.push(registro);
+    });
+
+    const json = JSON.stringify(dados, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'dados.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+
   <style>
     /* Definir cores personalizadas */
 :root {
